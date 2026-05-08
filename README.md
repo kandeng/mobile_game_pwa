@@ -123,3 +123,7 @@ To use this framework for your own game:
 ## License
 
 MIT — see [LICENSE](./LICENSE)
+
+## Documentation
+
+For technical details including architecture and workflow, please refer to [doc/WIKI.md](doc/WIKI.md).
