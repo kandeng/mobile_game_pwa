@@ -145,11 +145,11 @@ App
 
 ### 4.1 State Management
 
-All entity state is centralized in `App.tsx` as a single state object. The demo uses `DroneState`, but this interface is designed to be renamed and extended for any game entity:
+All entity state is centralized in `App.tsx` as a single `EntityState` object. Extend this interface for your game:
 
 ```typescript
-// Rename to RobotState, CharacterState, etc. for your game
-interface DroneState {
+// Extend with your own fields (speed, health, battery, etc.)
+interface EntityState {
   x: number;     // horizontal position (east-west)
   y: number;     // horizontal position (north-south)
   z: number;     // altitude (0.5 – 10)
@@ -212,7 +212,7 @@ mouseup    → if (now - lastTouchTime < 500) → DISCARD
 The demo scene maps entity state to Three.js transforms:
 
 ```
-DroneState (App.tsx)
+EntityState (App.tsx)
     │
     ├──→ ThreeScene (demo)
     │      └── DroneModel position = [state.x, state.z, -state.y]

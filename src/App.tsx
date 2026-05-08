@@ -4,7 +4,7 @@ import Joystick from './components/Joystick';
 import ChatPanel from './components/ChatPanel';
 import HUD from './components/HUD';
 
-export interface DroneState {
+export interface EntityState {
   x: number;
   y: number;
   z: number;
@@ -13,7 +13,7 @@ export interface DroneState {
 }
 
 function App() {
-  const [droneState, setDroneState] = useState<DroneState>({
+  const [entityState, setEntityState] = useState<EntityState>({
     x: 0,
     y: 0,
     z: 2.4,
@@ -36,7 +36,7 @@ function App() {
     const tick = () => {
       const { vx, vy, vyaw, vz, vf } = velocityRef.current;
       if (vx !== 0 || vy !== 0 || vyaw !== 0 || vz !== 0 || vf !== 0) {
-        setDroneState((prev) => ({
+        setEntityState((prev) => ({
           ...prev,
           x: parseFloat((prev.x + vx * 0.016).toFixed(2)),
           y: parseFloat((prev.y + vy * 0.016).toFixed(2)),
@@ -123,10 +123,10 @@ function App() {
         style={{ height: `${100 - chatHeight}vh` }}
       >
         {/* 3D Scene background */}
-        <ThreeScene droneState={droneState} />
+        <ThreeScene entityState={entityState} />
 
         {/* Telemetry HUD overlay */}
-        <HUD droneState={droneState} />
+        <HUD entityState={entityState} />
 
         {/* Joystick overlay */}
         <Joystick

@@ -2,7 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import { Suspense } from 'react';
 import * as THREE from 'three';
-import type { DroneState } from '../App';
+import type { EntityState } from '../App';
 
 function AirportSquare() {
   return (
@@ -19,7 +19,7 @@ function GridLines() {
   );
 }
 
-function DroneModel({ state }: { state: DroneState }) {
+function DroneModel({ state }: { state: EntityState }) {
   const { scene } = useGLTF('/models/crazyflie_2.x.glb');
   return (
     <primitive
@@ -32,11 +32,11 @@ function DroneModel({ state }: { state: DroneState }) {
 }
 
 interface ThreeSceneProps {
-  droneState: DroneState;
+  entityState: EntityState;
 }
 
-export default function ThreeScene({ droneState }: ThreeSceneProps) {
-  const fov = Math.max(20, 75 - droneState.focal * 5);
+export default function ThreeScene({ entityState }: ThreeSceneProps) {
+  const fov = Math.max(20, 75 - entityState.focal * 5);
 
   return (
     <div className="absolute inset-0 z-0">
@@ -49,7 +49,7 @@ export default function ThreeScene({ droneState }: ThreeSceneProps) {
         <Suspense fallback={null}>
           <AirportSquare />
           <GridLines />
-          <DroneModel state={droneState} />
+          <DroneModel state={entityState} />
         </Suspense>
         <OrbitControls
           enablePan={false}

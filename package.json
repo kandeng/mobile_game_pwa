@@ -1,17 +1,21 @@
 {
   "name": "mobile_game_pwa",
   "version": "1.0.0",
-  "description": "",
+  "description": "General-purpose mobile game UI framework with joystick, chat panel, and HUD components",
   "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./components/*": "./src/components/*"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "private": true,
+  "keywords": ["mobile", "game", "pwa", "joystick", "ui-framework", "vr", "ar"],
+  "author": "Kan Deng",
+  "license": "MIT",
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",

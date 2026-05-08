@@ -101,10 +101,60 @@ mobile_game_pwa/
 
 ## Integration Guide
 
-To use this framework for your own game:
+### Option A: Use as a local npm package
+
+Install this framework as a dependency in your own project using a local file reference:
+
+```bash
+# In your project directory
+npm install ../mobile_game_pwa
+```
+
+This adds the following to your `package.json`:
+
+```json
+{
+  "dependencies": {
+    "mobile_game_pwa": "file:../mobile_game_pwa"
+  }
+}
+```
+
+Then import the components in your code:
+
+```tsx
+import { Joystick, ChatPanel, HUD } from 'mobile_game_pwa';
+import type { EntityState } from 'mobile_game_pwa';
+```
+
+**Exported components:**
+
+| Component | Description |
+|-----------|-------------|
+| `Joystick` | 4-mode touch joystick (Move/Rotate/Height/Lens) |
+| `ChatPanel` | Resizable AI chat panel with expandable toolbox |
+| `HUD` | Telemetry heads-up display overlay |
+
+**Exported types:**
+
+| Type | Description |
+|------|-------------|
+| `EntityState` | State interface with `x`, `y`, `z`, `yaw`, `focal` fields |
+
+**Peer dependencies your project needs:**
+
+```bash
+npm install react react-dom framer-motion lucide-react
+```
+
+**Note:** Since this package exports raw TypeScript source, your project's bundler (Vite) handles transpilation. No separate build step is required for the package itself.
+
+### Option B: Copy source files directly
+
+Alternatively, copy the reusable components into your project:
 
 1. **Replace `ThreeScene.tsx`** with your VR/AR scene component. It receives a state object and renders accordingly.
-2. **Customize `DroneState`** in `App.tsx` — rename and extend the state interface to match your game entity (e.g., `RobotState`, `CharacterState`).
+2. **Customize `EntityState`** in `App.tsx` — extend the state interface to match your game entity (add speed, health, battery, etc.).
 3. **Map joystick callbacks** (`onMove`, `onRotate`, `onHeight`, `onFocal`) to your game's control logic or network protocol.
 4. **Customize the HUD** to display game-specific telemetry.
 5. **Extend the toolbox** in `ChatPanel.tsx` with your game's action buttons.

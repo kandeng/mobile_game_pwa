@@ -60,6 +60,11 @@ export default function ChatPanel({ toolboxOpen, onToggleToolbox }: ChatPanelPro
                 <span className="text-xs">🤖</span>
               </div>
             )}
+            {msg.sender === 'user' && (
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                <span className="text-xs font-medium text-gray-600">我</span>
+              </div>
+            )}
             <div
               className={`max-w-[70%] px-3 py-2 rounded-xl text-sm ${
                 msg.sender === 'user'
@@ -69,9 +74,6 @@ export default function ChatPanel({ toolboxOpen, onToggleToolbox }: ChatPanelPro
             >
               {msg.text}
             </div>
-            {msg.sender === 'user' && (
-              <span className="text-sm font-medium text-gray-600">我</span>
-            )}
           </div>
         ))}
       </motion.div>
