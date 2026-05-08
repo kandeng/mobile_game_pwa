@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Camera, Users, Gamepad2, Settings, Radio } from 'lucide-react';
 
@@ -11,6 +11,7 @@ interface ChatMessage {
 interface ChatPanelProps {
   toolboxOpen: boolean;
   onToggleToolbox: () => void;
+  onDragDelta?: (deltaVh: number) => void;
 }
 
 const MOCK_MESSAGES: ChatMessage[] = [
@@ -18,16 +19,35 @@ const MOCK_MESSAGES: ChatMessage[] = [
   { id: 2, sender: 'bot', text: '看起来像是酒桶，但是也有可能装着武器，建议查验一下。' },
 ];
 
-export default function ChatPanel({ toolboxOpen, onToggleToolbox }: ChatPanelProps) {
+export default function ChatPanel({ toolboxOpen, onToggleToolbox, onDragDelta }: ChatPanelProps) {
   const [messages] = useState<ChatMessage[]>(MOCK_MESSAGES);
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
+  const dragStartY = useRef(0);
+  const isDragging = useRef(false);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const handleDragStart = useCallback((e: React.TouchEvent) => {
+    isDragging.current = true;
+    dragStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleDragMove = useCallback((e: React.TouchEvent) => {
+    if (!isDragging.current || !onDragDelta) return;
+    const deltaY = dragStartY.current - e.touches[0].clientY;
+    const deltaVh = (deltaY / window.innerHeight) * 100;
+    onDragDelta(deltaVh);
+    dragStartY.current = e.touches[0].clientY;
+  }, [onDragDelta]);
+
+  const handleDragEnd = useCallback(() => {
+    isDragging.current = false;
+  }, []);
 
   const toolboxItems = [
     { icon: Camera, label: '拍照' },
@@ -38,20 +58,28 @@ export default function ChatPanel({ toolboxOpen, onToggleToolbox }: ChatPanelPro
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-white/70 backdrop-blur-xl border-t border-gray-200" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 20px)' }}>
-      {/* Drag handle */}
-      <div className="flex justify-center py-2 cursor-grab active:cursor-grabbing">
-        <div className="w-10 h-1 rounded-full bg-gray-300" />
+      {/* Drag handle — large touch target */}
+      <div
+        className="flex justify-center items-center cursor-grab active:cursor-grabbing touch-none"
+        style={{ height: '44px', flexShrink: 0 }}
+        onTouchStart={handleDragStart}
+        onTouchMove={handleDragMove}
+        onTouchEnd={handleDragEnd}
+      >
+        <div className="w-12 h-1.5 rounded-full bg-gray-300" />
       </div>
+      {/* Fixed top spacer */}
+      <div style={{ height: '24px', flexShrink: 0 }} />
       <motion.div
         ref={scrollRef}
-        className="flex-1 min-h-0 overflow-y-auto px-3 py-2 space-y-2"
+        className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 space-y-2"
         layout
         transition={{ duration: 0.3 }}
       >
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`flex items-start gap-2 ${
+            className={`flex items-start gap-2 w-full ${
               msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
             }`}
           >
@@ -66,7 +94,7 @@ export default function ChatPanel({ toolboxOpen, onToggleToolbox }: ChatPanelPro
               </div>
             )}
             <div
-              className={`max-w-[70%] px-3 py-2 rounded-xl text-sm ${
+              className={`max-w-[calc(100%-48px)] px-3 py-2 rounded-xl text-sm break-words ${
                 msg.sender === 'user'
                   ? 'bg-gray-100 text-gray-800'
                   : 'bg-gray-100 text-gray-800'
@@ -77,6 +105,9 @@ export default function ChatPanel({ toolboxOpen, onToggleToolbox }: ChatPanelPro
           </div>
         ))}
       </motion.div>
+
+      {/* Fixed bottom spacer */}
+      <div style={{ height: '24px', flexShrink: 0 }} />
 
       {/* Input bar */}
       <div className="flex items-center gap-2 px-3 py-2 border-t border-gray-100">

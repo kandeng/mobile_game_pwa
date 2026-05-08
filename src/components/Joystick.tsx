@@ -129,7 +129,7 @@ export default function Joystick({ onMove, onRotate, onHeight, onFocal, onStop }
     <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
       <div
         ref={outerRef}
-        className="relative w-56 h-56 rounded-full bg-white/[0.03] border border-white/10 pointer-events-auto"
+        className="relative w-56 h-56 rounded-full bg-black/[0.03] backdrop-blur-[2px] border border-gray-400/20 shadow-sm pointer-events-auto"
         onTouchStart={handleStart}
         onTouchMove={handleMove}
         onTouchEnd={handleTouchEnd}
@@ -208,12 +208,12 @@ export default function Joystick({ onMove, onRotate, onHeight, onFocal, onStop }
         <div
           className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border flex items-center justify-center transition-colors duration-150 ${
             pressed
-              ? 'bg-gray-700/50 border-gray-600'
-              : 'bg-white/[0.05] border-white/15'
+              ? 'bg-gray-700/30 border-gray-500/40'
+              : 'bg-white/10 border-gray-400/20'
           }`}
         >
           <span className={`text-lg font-bold ${
-            pressed ? 'text-white' : 'text-gray-600'
+            pressed ? 'text-white' : 'text-gray-700'
           }`}>
             {MODE_LABELS[mode]}
           </span>
