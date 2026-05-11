@@ -4,6 +4,18 @@ A mobile-first Progressive Web App framework for building VR and AR mobile games
 
 The included demo uses a Crazyflie drone model to illustrate the framework's control capabilities. In production, the 3D viewport is replaced with your own VR/AR scene.
 
+<p align="center">
+  <img src="doc/images/crazyflie_pwa_motion.png" width="24%" />
+  <img src="doc/images/crazyflie_pwa_rotation.png" width="24%" />
+  <img src="doc/images/crazyflie_pwa_updown.png" width="24%" />
+  <img src="doc/images/crazyflie_pwa_lens.png" width="24%" />
+</p>
+
+<p align="center">
+  <img src="doc/images/crazyflie_pwa_chatbox.png" width="24%" />
+  <img src="doc/images/crazyflie_pwa_toolbox.png" width="24%" />
+</p>
+
 ## Features
 
 - **Pluggable 3D Viewport** — Swap in any Three.js scene, AR camera feed, or VR environment
