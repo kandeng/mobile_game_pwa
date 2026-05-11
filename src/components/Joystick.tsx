@@ -3,7 +3,7 @@ import { MoveUp, MoveDown, MoveLeft, MoveRight } from 'lucide-react';
 
 type JoystickMode = 'move' | 'rotate' | 'height' | 'lens';
 
-const MODE_CYCLE: JoystickMode[] = ['move', 'rotate', 'height', 'lens'];
+const DEFAULT_MODE_CYCLE: JoystickMode[] = ['move', 'rotate', 'height', 'lens'];
 const MODE_LABELS: Record<JoystickMode, string> = {
   move: 'M',
   rotate: 'R',
@@ -12,6 +12,7 @@ const MODE_LABELS: Record<JoystickMode, string> = {
 };
 
 interface JoystickProps {
+  modeOrder?: JoystickMode[];
   onMove: (vx: number, vy: number) => void;
   onRotate: (vyaw: number) => void;
   onHeight: (vz: number) => void;
@@ -19,12 +20,13 @@ interface JoystickProps {
   onStop: () => void;
 }
 
-export default function Joystick({ onMove, onRotate, onHeight, onFocal, onStop }: JoystickProps) {
+export default function Joystick({ modeOrder, onMove, onRotate, onHeight, onFocal, onStop }: JoystickProps) {
+  const modeCycle = modeOrder ?? DEFAULT_MODE_CYCLE;
   const outerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const pressedRef = useRef(false);
   const lastTouchTime = useRef(0);
-  const [mode, setMode] = useState<JoystickMode>('move');
+  const [mode, setMode] = useState<JoystickMode>(modeCycle[0]);
   const [pressed, setPressed] = useState(false); // visual feedback only
 
   const getRelativePos = useCallback(
@@ -105,8 +107,8 @@ export default function Joystick({ onMove, onRotate, onHeight, onFocal, onStop }
       pressedRef.current = false;
       setPressed(false);
       setMode((prev) => {
-        const idx = MODE_CYCLE.indexOf(prev);
-        return MODE_CYCLE[(idx + 1) % MODE_CYCLE.length];
+        const idx = modeCycle.indexOf(prev);
+        return modeCycle[(idx + 1) % modeCycle.length];
       });
       onStop();
       return;
